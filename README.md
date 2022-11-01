@@ -1,6 +1,6 @@
 # RUCKUS-StackStorm
-#Installation Instructions
-#Untar the files 
+Installation Instructions
+Untar the files 
 #cd to the directory of the uncompressed files
 #execute the following commands
 #$ git init
