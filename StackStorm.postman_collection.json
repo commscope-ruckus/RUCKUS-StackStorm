@@ -1,0 +1,490 @@
+{
+	"info": {
+		"_postman_id": "7028a632-cf0c-4012-97e4-ee7a7d7a4034",
+		"name": "StackStorm",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9262131"
+	},
+	"item": [
+		{
+			"name": "Get authentication token",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"pm.collectionVariables.set(\"token\", jsonData.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "st2admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{host}}/auth/v1/tokens",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"auth",
+						"v1",
+						"tokens"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create API key",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{host}}/api/v1/apikeys?x-auth-token={{token}}",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"apikeys"
+					],
+					"query": [
+						{
+							"key": "x-auth-token",
+							"value": "{{token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create domain in SmartZone",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "key",
+							"value": "st2-api-key",
+							"type": "string"
+						},
+						{
+							"key": "value",
+							"value": "OWZjYzEzZTQ5ODNjM2IyOTJmYmJmY2IyZmYxZWExYTgxYjEwZTNhNmI2MTRmNGFiZjdmZjE3NTVhZmMxYzY4ZA",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"action\": \"ruckussmartzone.orch_create_domain\",\n    \"parameters\": {\n        \"log_level\": \"DEBUG\",\n        \"domainName\": \"Sunnyvale\"\n    },\n    \"context\": {\n        \"trace_context\": {}\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{host}}/api/v1/executions",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"executions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send message to slack channel",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "key",
+							"value": "st2-api-key",
+							"type": "string"
+						},
+						{
+							"key": "value",
+							"value": "OWZjYzEzZTQ5ODNjM2IyOTJmYmJmY2IyZmYxZWExYTgxYjEwZTNhNmI2MTRmNGFiZjdmZjE3NTVhZmMxYzY4ZA",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"action\": \"slack.chat.postMessage\",\n    \"parameters\": {\n        \"log_level\": \"DEBUG\",\n        \"channel\": \"automation\",\n        \"as_user\": \"mmolinari\",\n        \"text\": \"this is a test using the StackStorm API\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{host}}/api/v1/executions",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"executions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Run ansible playbook",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "key",
+							"value": "st2-api-key",
+							"type": "string"
+						},
+						{
+							"key": "value",
+							"value": "OWZjYzEzZTQ5ODNjM2IyOTJmYmJmY2IyZmYxZWExYTgxYjEwZTNhNmI2MTRmNGFiZjdmZjE3NTVhZmMxYzY4ZA",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"action\": \"ansible.playbook\",\n    \"parameters\": {\n        \"playbook\": \"detect_device.yml\",\n        \"timeout\": \"900\"\n    },\n    \"context\": {\n        \"trace_context\": {}\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{host}}/api/v1/executions",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"executions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List history entries",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"pm.collectionVariables.set(\"historyID\", jsonData[0].id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "key",
+							"value": "st2-api-key",
+							"type": "string"
+						},
+						{
+							"key": "value",
+							"value": "OWZjYzEzZTQ5ODNjM2IyOTJmYmJmY2IyZmYxZWExYTgxYjEwZTNhNmI2MTRmNGFiZjdmZjE3NTVhZmMxYzY4ZA",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{host}}/api/v1/executions",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"executions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List history entries (using token)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"pm.collectionVariables.set(\"historyID\", jsonData[0].id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{host}}/api/v1/executions?x-auth-token={{token}}",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"executions"
+					],
+					"query": [
+						{
+							"key": "x-auth-token",
+							"value": "{{token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get history entry details",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "key",
+							"value": "st2-api-key",
+							"type": "string"
+						},
+						{
+							"key": "value",
+							"value": "OWZjYzEzZTQ5ODNjM2IyOTJmYmJmY2IyZmYxZWExYTgxYjEwZTNhNmI2MTRmNGFiZjdmZjE3NTVhZmMxYzY4ZA",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{host}}/api/v1/executions/{{historyID}}",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"executions",
+						"{{historyID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create rule",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "key",
+							"value": "st2-api-key",
+							"type": "string"
+						},
+						{
+							"key": "value",
+							"value": "OWZjYzEzZTQ5ODNjM2IyOTJmYmJmY2IyZmYxZWExYTgxYjEwZTNhNmI2MTRmNGFiZjdmZjE3NTVhZmMxYzY4ZA",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"pack\": \"default\",\n    \"enabled\": true,\n    \"trigger\": {\n        \"type\": \"core.st2.webhook\",\n        \"parameters\": {\n            \"url\": \"vlan/mismatch\"\n        }\n    },\n    \"criteria\": {},\n    \"action\": {\n        \"ref\": \"core.echo\",\n        \"parameters\": {\n            \"message\": \"RA detected a VLAN mistmatch\"\n        }\n    },\n    \"name\": \"VLAN mismatch\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{host}}/api/v1/rules",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"rules"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "historyID",
+			"value": ""
+		},
+		{
+			"key": "host",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}
