@@ -1,6 +1,6 @@
 # RUCKUS-StackStorm
 
-Installation Instructions:
+Installation instructions for SmartZone and ICX integration packs:
 
 untar the files
 
