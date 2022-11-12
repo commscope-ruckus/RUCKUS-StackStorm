@@ -1,0 +1,43 @@
+version: 1.0
+tasks:
+  # [379, 103]
+  task1:
+    action: examples.python_runner_load_and_print_fixture
+    input:
+      log_level: DEBUG
+      file_path: /opt/stackstorm/packs/default/inventory1.json
+    next:
+      - do:
+          - task2
+        publish:
+          - json_data: <% result().result %>
+  # [380, 249]
+  task2:
+    action: core.noop
+
+output:
+  - json_data: '{{ctx("json_data")}}'
+  - getListItem: '{{ ctx("json_data").hosts[1].ip }}'
+  - getAllAddresses1: '{{ ctx("json_data").hosts | map(attribute="ip") }}'
+  - getAllAddresses2: '{% for host in ctx("json_data").hosts %}
+  {{ host.ip}}{% endfor %}'
+  - getItemsByModel1: '{% for host in ctx("json_data").hosts %}
+  {% if "ICX7150-C12P" in host.properties["model"] %}
+  {{ host.hostname }} - {{ host.ip }} 
+  username: {{ host.properties["username"] }} 
+  password: {{ host.properties["password"] }}
+  {% endif %}{% endfor %}'
+  - getItemsByModel2: '{% for host in ctx("json_data").hosts | 
+  selectattr("properties.model","eq","ICX7150-C12P")%}{{host}}
+  {% endfor %}'
+  - getAddressByName: '{% for host in ctx("json_data").hosts | 
+  selectattr("hostname","eq","ICX 7150-A")%}{{host.ip}}
+  {% endfor %}'
+  - getNameAddrCreds: '{% for host in ctx("json_data").hosts %} 
+  {{ host.hostname }} - {{ host.ip }}
+  {{ host.properties["username"] }} 
+  {{ host.properties["password"] }}
+  {% endfor %}'
+
+  
+  

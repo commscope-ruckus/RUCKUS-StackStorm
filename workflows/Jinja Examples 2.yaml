@@ -1,0 +1,35 @@
+version: 1.0
+
+vars:
+  - json_str: '{"hosts": [{"hostname": "ICX 7150-A","ip": "192.168.0.1","properties": {"model": "ICX7150-C12P","version": "9.0.10c","username": "admin","password": "password1"}},{"hostname": "ICX 7150-B","ip": "10.0.0.100","properties": {"model": "ICX7150-C12P","version": "8.0.90d","username": "admin","password": "password2"}},{"hostname": "ICX 7750","ip": "74.124.43.78","properties": {"model": "ICX7150-26Q","version": "9.0.00","username": "admin","password": "password3"}},{"hostname": "ICX 7850-ASE","ip": "171.16.10.132","properties": {"model": "ICX7850-48F","version": "9.0.00","username": "admin","password": "password4"}}]}' 
+tasks:
+  # [286, 136]
+  task1:
+    action: core.noop
+
+output:
+  - json_string: '{{ ctx("json_str") }}'
+  - json_data: '{{from_json_string(ctx("json_str"))}}'
+  - getListItem: '{{ ctx("json_data").hosts[1].ip }}'
+  - getAllAddresses1: '{{ ctx("json_data").hosts | map(attribute="ip") }}'
+  - getAllAddresses2: '{% for host in ctx("json_data").hosts %}
+  {{ host.ip}} 
+  {% endfor %}'
+  - getItemsByModel1: '{% for host in ctx("json_data").hosts %}
+  {% if "ICX7150-C12P" in host.properties["model"] %}
+  {{ host.hostname }} - {{ host.ip }} 
+  username: {{ host.properties["username"] }} 
+  password: {{ host.properties["password"] }}
+  {% endif %}
+  {% endfor %}'
+  - getItemsByModel2: '{% for host in ctx("json_data").hosts | 
+  selectattr("properties.model","eq","ICX7150-C12P")%}{{host}}
+  {% endfor %}'
+  - getAddressByName: '{% for host in ctx("json_data").hosts | 
+  selectattr("hostname","eq","ICX 7150-A")%}{{host.ip}}
+  {% endfor %}'
+  - getNameAddrCreds: '{% for host in ctx("json_data").hosts %} 
+  {{ host.hostname }} - {{ host.ip }}
+  {{ host.properties["username"] }} 
+  {{ host.properties["password"] }}
+  {% endfor %}'

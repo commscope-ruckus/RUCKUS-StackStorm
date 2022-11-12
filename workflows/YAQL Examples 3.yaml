@@ -1,0 +1,32 @@
+version: 1.0
+
+vars: 
+  - json_string: '{"hosts": [{"hostname": "ICX 7150-C","ip": "73.45.232.12","properties": {"model": "ICX7150-C12P","version": "8.0.92d","username": "admin","password": "password5"}},{"hostname": "ICX 7150-D","ip": "192.168.10.43","properties": {"model": "ICX7150-C12P","version": "8.0.92d","username": "admin","password": "password6"}}]}'
+
+tasks:
+  # [379, 103]
+  task1:
+    action: examples.python_runner_load_and_print_fixture
+    input:
+      log_level: DEBUG
+      file_path: /opt/stackstorm/packs/default/inventory1.json
+    next:
+      - do:
+          - task2
+        publish:
+          - json: <% result().result %>
+      - do:
+          - task3
+        publish:
+          - string: <% ctx().json_string %>
+  # [204, 251]
+  task2:
+    action: core.noop
+  # [537, 251]
+  task3:
+    action: core.noop
+
+output:
+  - json_data: <% ctx(json) %>
+  - string_data: <% ctx(string) %>
+

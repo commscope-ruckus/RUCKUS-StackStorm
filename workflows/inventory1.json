@@ -1,0 +1,44 @@
+{
+	"hosts": [
+		{
+			"hostname": "ICX 7150-A",
+			"ip": "192.168.0.1",
+			"properties": {
+				"model": "ICX7150-C12P",
+				"version": "9.0.10c",
+				"username": "admin",
+				"password": "password1"
+			}
+		},
+		{
+			"hostname": "ICX 7150-B",
+			"ip": "10.0.0.100",
+			"properties": {
+				"model": "ICX7150-C12P",
+				"version": "8.0.90d",
+				"username": "admin",
+				"password": "password2"
+			}
+		},
+		{
+			"hostname": "ICX 7750",
+			"ip": "74.124.43.78",
+			"properties": {
+				"model": "ICX7150-26Q",
+				"version": "9.0.00",
+				"username": "admin",
+				"password": "password3"
+			}
+		},
+		{
+			"hostname": "ICX 7850-ASE",
+			"ip": "171.16.10.132",
+			"properties": {
+				"model": "ICX7850-48F",
+				"version": "9.0.00",
+				"username": "admin",
+				"password": "password4"
+			}
+		}
+	]
+}

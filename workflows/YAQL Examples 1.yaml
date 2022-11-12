@@ -1,0 +1,26 @@
+version: 1.0
+tasks:
+  # [379, 103]
+  task1:
+    action: examples.python_runner_load_and_print_fixture
+    input:
+      log_level: DEBUG
+      file_path: /opt/stackstorm/packs/default/inventory1.json
+    next:
+      - do:
+          - task2
+        publish:
+          - json_data: <% result().result %>
+  # [380, 249]
+  task2:
+    action: core.noop
+
+output:
+  - json_data: <% ctx(json_data) %>
+  - getListItem: <% ctx(json_data).hosts[1].ip %>
+  - getAllAddresses1: <% ctx("json_data").hosts.ip %>
+  - getAllAddresses2: <% ctx("json_data").hosts.select($.ip) %>
+  - getItemsByModel: <% ctx("json_data").hosts.where($.properties.model = "ICX7150-C12P") %>
+  - getAddressByName: <% ctx("json_data").hosts.where($.hostname = "ICX 7150-A").select($.ip) %>
+  - getNameAddrCreds: <% ctx("json_data").hosts.select([$.hostname, $.ip, $.properties.username, $. properties.password]) %>
+
