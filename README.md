@@ -1,6 +1,9 @@
 # RUCKUS-StackStorm
 
-Installation instructions for SmartZone and ICX integration packs:
+This integration pack was developed by Orchestral.ai
+For more details, please contact ankita@orchestral.ai
+
+Instructions for installation of the SmartZone and ICX integration packs:
 
 untar the files
 
